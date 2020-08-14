@@ -1,0 +1,42 @@
+.Fade {
+    animation: FadeAnim;
+
+    animation-duration: 0.6s;
+
+    animation-delay: 0.2s;
+
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    animation-fill-mode: forwards;
+
+    opacity: 0;
+}
+
+.Show {
+    animation: ShowAnim;
+
+    animation-duration: 0.4s;
+
+    animation-delay: 0.1s;
+
+    animation-fill-mode: forwards;
+    transition: 0.4s all;
+}
+
+@keyframes ShowAnim {
+    0% {
+        transform: translateY(-6em);
+    }
+    100% {
+        transform: translateY(0em);
+    }
+}
+
+@keyframes FadeAnim {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
