@@ -4,20 +4,9 @@ import {
     MOVIES_FETCH_FINISHED,
     SEARCH_QUERY,
     SET_PAGE,
-    // ------------ UNDER DEVELOPMENT ------------
-    // SET_FILTERS,
-    // FILTERACTIVE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
-    // ------------ UNDER DEVELOPMENT ------------
-    // filters: {
-    //     yearFilter: [],
-    //     voteFilter: [],
-    //     genreFilter: {},
-    // },
-    // filterActive: false,
-
     movies: [],
     totalPages: 1,
     page: 1,
@@ -29,18 +18,6 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        // ------------ UNDER DEVELOPMENT ------------
-        // case SET_FILTERS:
-        //     return {
-        //         ...state,
-        //         filters: action.payload,
-        //         loading: false,
-        //     };
-        // case FILTERACTIVE:
-        //     return {
-        //         ...state,
-        //         filterActive: action.payload,
-        //     };
         case MOVIES_FETCH_STARTED:
             return {
                 ...state,

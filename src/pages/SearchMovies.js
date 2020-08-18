@@ -28,7 +28,6 @@ const SearchMovies = ({ searchQuery, fetchError, isLoading }) => {
 const mapStateToProps = (state) => {
     return {
         searchQuery: state.movies.searchQuery,
-        type: state.movies.type,
         page: state.movies.page,
         fetchError: state.movies.fetchError,
         isLoading: state.movies.isLoading,

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -130,7 +129,7 @@ const ActorsContainer = styled.div`
     }
 `;
 
-const ActorCard = styled(animated.div)`
+const ActorCard = styled.div`
     flex: 0 0 24%;
     margin: 0.5%;
     display: flex;

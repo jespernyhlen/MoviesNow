@@ -13,5 +13,6 @@ export const SET_PAGE = 'SET_PAGE';
 
 // ------------ UNDER DEVELOPMENT ------------
 
-// export const FILTERACTIVE = 'FILTERACTIVE';
-// export const SET_FILTERS = 'SET_FILTERS';
+export const FILTER_OPEN = 'FILTER_OPEN';
+export const SET_FILTERS = 'SET_FILTERS';
+export const RESET_FILTERS = 'RESET_FILTERS';

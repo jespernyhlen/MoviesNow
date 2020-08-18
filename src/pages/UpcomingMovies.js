@@ -28,7 +28,6 @@ const UpcomingMovies = ({ page, fetchMovies, fetchError, isLoading }) => {
 
 const mapStateToProps = (state) => {
     return {
-        type: state.movies.type,
         page: state.movies.page,
         fetchError: state.movies.fetchError,
         isLoading: state.movies.isLoading,

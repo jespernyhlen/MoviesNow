@@ -6,9 +6,6 @@ import styled from 'styled-components';
 import Loader from '../components/Extra/Loader';
 import MoviesContainer from '../components/Movies/MoviesContainer';
 
-// ------------ UNDER DEVELOPMENT ------------
-// import Filter from '../components/Forms/Filter';
-
 const TrendingMovies = ({ page, fetchError, isLoading, fetchMovies }) => {
     let url = `&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}`;
 
@@ -18,8 +15,6 @@ const TrendingMovies = ({ page, fetchError, isLoading, fetchMovies }) => {
 
     return (
         <Wrapper>
-            {/* ------------ UNDER DEVELOPMENT ------------
-            <Filter /> */}
             <HeaderText>Trending movies right now</HeaderText>
             {fetchError && (
                 <ErrorText>An error occured, please try again.</ErrorText>
@@ -31,7 +26,6 @@ const TrendingMovies = ({ page, fetchError, isLoading, fetchMovies }) => {
 
 const mapStateToProps = (state) => {
     return {
-        type: state.movies.type,
         page: state.movies.page,
         fetchError: state.movies.fetchError,
         isLoading: state.movies.isLoading,

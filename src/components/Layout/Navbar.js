@@ -1,15 +1,23 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setNavOpen, setPage } from '../../actions';
+import { setNavOpen, setPage, setFilters, setFilterOpen } from '../../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 import Searchbar from './Searchbar';
+import Filter from '../Forms/Filter';
 import Logo from '../Images/logo.png';
 
-// import FilterForm from '../Forms/FilterForm';
-
-const Navbar = ({ setPage, movieOpen, setNavOpen, navOpen }) => {
+const Navbar = ({
+    setPage,
+    movieOpen,
+    setNavOpen,
+    navOpen,
+    filterOpen,
+    setFilterOpen,
+}) => {
     let handleClick = (e) => {
         setNavOpen(!navOpen);
         let rootElement = document.querySelectorAll('#root')[0];
@@ -18,6 +26,10 @@ const Navbar = ({ setPage, movieOpen, setNavOpen, navOpen }) => {
 
     let resetPagination = () => {
         setPage(1);
+    };
+
+    let onClick = (e) => {
+        filterOpen ? setFilterOpen(false) : setFilterOpen(true);
     };
     return (
         <>
@@ -46,10 +58,14 @@ const Navbar = ({ setPage, movieOpen, setNavOpen, navOpen }) => {
                     >
                         Upcoming Movies
                     </StyledLink>
-                    {/* ------------ UNDER DEVELOPMENT ------------
-            <FilterForm /> */}
                 </LeftContainer>
                 <RightContainer className={navOpen ? 'hide' : ''}>
+                    <FilterButton onClick={onClick}>
+                        <FilterIcon />
+                        Filter
+                    </FilterButton>
+                    <Filter />
+
                     <Searchbar />
                 </RightContainer>
                 <Hamburger
@@ -91,9 +107,41 @@ const Navbar = ({ setPage, movieOpen, setNavOpen, navOpen }) => {
 const mapStateToProps = (state) => ({
     movieOpen: state.movie.isOpen,
     navOpen: state.navigation.isOpen,
+    filterOpen: state.filter.filterOpen,
 });
 
-export default connect(mapStateToProps, { setNavOpen, setPage })(Navbar);
+export default connect(mapStateToProps, {
+    setNavOpen,
+    setPage,
+    setFilters,
+    setFilterOpen,
+})(Navbar);
+
+const FilterButton = styled.div`
+    font-size: 1.05em;
+    font-weight: 400;
+    padding: 0 0.5em 0.1em;
+    margin: auto 1em;
+    opacity: 75%;
+    cursor: pointer;
+    transition: 0.2s all;
+
+    &:hover {
+        opacity: 100%;
+    }
+
+    @media only screen and (max-width: 667px) {
+        font-size: 1.3em;
+        margin: auto 0 auto 0.5em;
+        min-width: 65px;
+    }
+`;
+
+const FilterIcon = styled(FontAwesomeIcon).attrs({ icon: faSlidersH })`
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+`;
 
 const StyledLink = styled(NavLink)`
     color: #ccc;
@@ -105,18 +153,21 @@ const StyledLink = styled(NavLink)`
     text-decoration: none;
     font-size: 1.05em;
     font-weight: 400;
+    opacity: 75%;
+
     transition: all 0.2s ease-in-out;
 
     &.active {
         color: #fff;
+        opacity: 100%;
     }
 
     :hover {
         cursor: pointer;
-        opacity: 75%;
+        opacity: 100%;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         padding: 0 0.5em 0.1em;
         margin: 2rem 0 0;
         font-size: 2rem;
@@ -127,7 +178,7 @@ const LeftContainer = styled.div`
     display: flex;
     margin-left: 1rem;
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         margin-left: 0;
     }
 `;
@@ -139,7 +190,7 @@ const RightContainer = styled.div`
         transform: translateY(-50vh) !important;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         position: absolute;
         top: 4.2rem;
         width: 100%;
@@ -164,7 +215,7 @@ const StyledNavbar = styled.nav`
         transform: translateY(-50vh) !important;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         .desktop {
             display: none;
         }
@@ -172,7 +223,7 @@ const StyledNavbar = styled.nav`
         background: #0e0e0e;
     }
 
-    /* @media only screen and (max-width: 600px) {
+    /* @media only screen and (max-width: 667px) {
         display: none;
     } */
 `;
@@ -182,7 +233,7 @@ const NavLogoContainer = styled.div``;
 const NavImg = styled.img`
     height: 3rem;
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         width: 100px;
     }
 `;
@@ -202,7 +253,7 @@ const NavContentMobile = styled.div`
         z-index: 9;
         background: #1e1f26;
 
-        @media only screen and (min-width: 600px) {
+        @media only screen and (min-width: 667px) {
             display: none;
         }
     }
@@ -283,7 +334,7 @@ const Hamburger = styled.div`
         left: 50%;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         display: block;
     }
 `;

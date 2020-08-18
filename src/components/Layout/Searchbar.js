@@ -86,7 +86,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, { fetchMovies })(Searchbar);
 
 const Form = styled.form`
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         display: flex;
         justify-content: center;
         width: 100vw;
@@ -114,7 +114,7 @@ const StyledInput = styled.input`
         color: #aaa;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         height: 4rem;
         width: 100%;
         font-size: 1.3rem;
@@ -142,7 +142,7 @@ const StyledButton = styled.button`
         border-radius: 10%;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 667px) {
         height: 4rem;
         width: 5.5em;
         margin: 0;

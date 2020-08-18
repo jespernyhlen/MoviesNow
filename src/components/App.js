@@ -5,8 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
 
 import Navbar from '../components/Layout/Navbar';
-// ------------ UNDER DEVELOPMENT ------------
-// import FilterMovies from '../pages/FilterMovies';
+import FilterMovies from '../pages/FilterMovies';
 import TrendingMovies from '../pages/TrendingMovies';
 import UpcomingMovies from '../pages/UpcomingMovies';
 import SearchMovies from '../pages/SearchMovies';
@@ -27,14 +26,13 @@ const App = () => {
                 <Route exact path='/trending' component={TrendingMovies} />
                 <Route exact path='/upcoming' component={UpcomingMovies} />
                 <Route exact path='/search' component={SearchMovies} />
-                {/* ------------ UNDER DEVELOPMENT ------------
-                <Route exact path='/filter' component={FilterMovies} /> */}
+                <Route exact path='/filter' component={FilterMovies} />
                 <Route
                     path={[
                         '/trending/:id',
                         '/upcoming/:id',
                         '/search/:id',
-                        '/favorites/:id',
+                        '/filter/:id',
                     ]}
                     component={FullDetailsMovie}
                 />
