@@ -18,10 +18,13 @@ const MovieCard = ({ movie }) => {
 
     const { path } = useRouteMatch();
 
-    let releaseDate = release_date ? release_date : details.release_date;
-    let yearMonthList = releaseDate.split('-');
+    let releaseDate = () => {
+        if (!release_date) return '';
+        let releaseDate = release_date ? release_date : details.release_date;
+        let yearMonthList = releaseDate.split('-');
 
-    releaseDate = `${yearMonthList[0]}/${yearMonthList[1]}`;
+        return `${yearMonthList[0]}/${yearMonthList[1]}`;
+    };
 
     let movieDetailsPath = `${path}/${id}/details`;
 
@@ -38,11 +41,15 @@ const MovieCard = ({ movie }) => {
                 />
             </Link>
             <DetailsContainer>
-                <RatingContainer>
-                    <RatingIcon />
-                    {vote_average}
-                </RatingContainer>
-                <DateContainer>{releaseDate}</DateContainer>
+                {!vote_average ? null : (
+                    <RatingContainer>
+                        <RatingIcon />
+                        {vote_average}
+                    </RatingContainer>
+                )}
+                {!releaseDate() ? null : (
+                    <DateContainer>{releaseDate()}</DateContainer>
+                )}
             </DetailsContainer>
             <TitleContainer>{title}</TitleContainer>
         </MovieCardContainer>
@@ -56,10 +63,12 @@ const MovieCardContainer = styled.div`
     margin: 36px 20px;
     display: flex;
     transition: all ease-in-out 300ms;
-    box-shadow: 0 3px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 25px rgba(0, 0, 0, 0.6);
     background: #00000061;
     color: #fff;
     min-height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
 
     :hover {
         cursor: pointer;
@@ -127,21 +136,23 @@ const CardImage = styled.img`
 const DateContainer = styled.div`
     position: absolute;
     top: 0;
-    margin: 0.25rem;
-    border-radius: 0.25rem;
+    margin: 0.5rem;
+    border-radius: 10px;
     left: 0;
-    padding: 0.5rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     background-color: rgba(0, 0, 0, 0.95);
+    line-height: 1.5rem;
 `;
 
 const RatingContainer = styled.div`
     position: absolute;
     top: 0;
-    margin: 0.25rem;
-    border-radius: 0.25rem;
+    margin: 0.5rem;
+    border-radius: 10px;
     right: 0;
-    padding: 0.5rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     background-color: rgba(0, 0, 0, 0.95);
+    line-height: 1.5rem;
 `;
 
 const DetailsContainer = styled.div`
@@ -156,10 +167,11 @@ const TitleContainer = styled.p`
     position: absolute;
     bottom: 0;
     left: 0;
-    margin: 0.25rem 0.3rem;
-    border-radius: 3px;
-    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    padding: 0.25rem 0.75rem;
+    margin: 0.5rem;
     background-color: rgba(0, 0, 0, 0.95);
+    line-height: 1.5rem;
 `;
 
 const RatingIcon = styled(FontAwesomeIcon).attrs({ icon: faStar })`

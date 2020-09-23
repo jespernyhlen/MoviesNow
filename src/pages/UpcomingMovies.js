@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchMovies } from '../actions';
+import { fetchUpcomingMovies } from '../actions';
 import styled from 'styled-components';
 
 import Loader from '../components/Extra/Loader';
 import MoviesContainer from '../components/Movies/MoviesContainer';
 
-const UpcomingMovies = ({ page, fetchMovies, fetchError, isLoading }) => {
-    let searchDates = getSearchDates(365);
-
-    const url = `&language=en-US&region=US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&release_date.gte=${searchDates.from}&release_date.lte=${searchDates.end}&with_release_type=3%7C2`;
+const UpcomingMovies = (props) => {
+    const { page, fetchUpcomingMovies, fetchError, isLoading } = props;
+    const searchDates = getSearchDates(365);
 
     useEffect(() => {
-        fetchMovies(url, '', 'upcoming');
-    }, [fetchMovies, url]);
+        fetchUpcomingMovies(page, searchDates.from, searchDates.end);
+    }, [fetchUpcomingMovies, page]);
 
     return (
         <Wrapper>
@@ -34,7 +33,9 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchMovies })(UpcomingMovies);
+export default connect(mapStateToProps, { fetchUpcomingMovies })(
+    UpcomingMovies
+);
 
 const Wrapper = styled.div`
     margin: 8em 0 6rem;

@@ -21,38 +21,41 @@ function Filter({
     resetFilters,
 }) {
     const history = useHistory();
-    const [yearFilter, setYearFilter] = useState([]);
-    const [voteFilter, setVoteFilter] = useState([]);
-    const [genreFilter, setGenreFilter] = useState({});
+
+    const [values, setValues] = useState({
+        yearFilter: [],
+        voteFilter: [],
+        genreFilter: {},
+    });
+
+    const handleChange = (newValue, name) => {
+        setValues({ ...values, [name]: newValue });
+    };
 
     useEffect(() => {
-        setYearFilter(filters.yearFilter);
-        setVoteFilter(filters.voteFilter);
-        setGenreFilter(filters.genreFilter);
+        setValues({
+            yearFilter: filters.yearFilter,
+            voteFilter: filters.voteFilter,
+            genreFilter: filters.genreFilter,
+        });
     }, []);
 
-    let handleSubmit = (e) => {
-        let currentFilters = {
-            yearFilter: yearFilter,
-            voteFilter: voteFilter,
-            genreFilter: genreFilter,
+    useEffect(() => {
+        if (filterOpen) {
+            document.body.style.overflow = 'hidden';
+        }
+        return () => {
+            if (filterOpen) {
+                document.body.style.overflow = '';
+            }
         };
-        setFilters(currentFilters);
+    }, [filterOpen]);
+
+    let handleSubmit = (e) => {
+        setFilters(values);
         setFilterOpen(false);
 
         history.push('/filter');
-    };
-
-    let handleYearChange = (e) => {
-        setYearFilter(e);
-    };
-
-    let handleVoteChange = (e) => {
-        setVoteFilter(e);
-    };
-
-    let handleGenreChange = (e) => {
-        setGenreFilter(e);
     };
 
     let clearFilters = () => {
@@ -75,9 +78,9 @@ function Filter({
                     </SubHeaderText>
 
                     <>
-                        <YearSlider onChange={handleYearChange} />
-                        <VoteSlider onChange={handleVoteChange} />
-                        <GenreSelect onChange={handleGenreChange} />
+                        <YearSlider onChange={handleChange} />
+                        <VoteSlider onChange={handleChange} />
+                        <GenreSelect onChange={handleChange} />
                     </>
 
                     <ButtonsContainer>
@@ -149,6 +152,7 @@ const FilterContainer = styled.div`
 
     @media only screen and (max-width: 800px) {
         overflow: scroll;
+        padding: 2em 15px 2em;
     }
 `;
 
@@ -184,7 +188,7 @@ const HeaderText = styled.h4`
     margin-bottom: 0.75em;
 
     @media only screen and (max-width: 800px) {
-        font-size: 1.5em !important;
+        font-size: 1.6em;
         top: 2.5em;
     }
 `;
@@ -198,7 +202,7 @@ const SubHeaderText = styled.p`
     font-style: italic;
 
     @media only screen and (max-width: 800px) {
-        font-size: 1.3em !important;
+        font-size: 1.3em;
         top: 2.5em;
     }
 `;
@@ -229,7 +233,7 @@ const Button = styled.div`
 
     @media only screen and (max-width: 800px) {
         padding: 1em 0.75em 1em;
-        font-size: 1.2em;
+        font-size: 1.4em;
         width: 48%;
         margin: 2.5em 0;
     }
@@ -240,7 +244,7 @@ const ButtonClose = styled.p`
     position: absolute;
     left: 0;
     right: 0;
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: 300;
     letter-spacing: 0.5px;
     text-align: center;

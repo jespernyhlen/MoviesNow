@@ -4,8 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 
-import './select.css';
-
 class GenreSelect extends Component {
     constructor(props) {
         super(props);
@@ -64,6 +62,7 @@ class GenreSelect extends Component {
                         className='genre-select'
                         value={select.value}
                         options={select.options}
+                        isSearchable={false}
                         onChange={(e) => {
                             this.handleChange(e);
                             this.props.onChange(e, 'genreFilter');

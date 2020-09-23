@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import MovieCard from './MovieCard';
 
 const MoviesContainer = ({ movies }) => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return movies.length ? (
         <MovieContainer>
             {movies.map((movie) => (

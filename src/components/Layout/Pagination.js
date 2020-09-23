@@ -9,29 +9,20 @@ const Pagination = ({ movieOpen, setPage, totalPages, page, navOpen }) => {
         let pagesTotal = totalPages ? totalPages : 0;
         let nextPages;
         let startPage = 1;
-        if (page > 4) {
-            startPage = page - 1;
 
-            if (page === 2) {
-                startPage = page;
-            }
+        if (page > 4) {
+            startPage = page === 2 ? page : page - 1;
 
             let paginateFirstDots = page - 4 < 0 ? true : false;
 
             paginationLinks.push(
                 <React.Fragment key='paginationfirst'>
-                    <PaginationLink
-                        onClick={() => {
-                            setPage(page - 1);
-                        }}
-                    >
+                    <PaginationLink onClick={() => setPage(page - 1)}>
                         {'<  '}
                     </PaginationLink>
                     <PaginationLink
                         className={page === 1 ? 'active' : ''}
-                        onClick={() => {
-                            setPage(1);
-                        }}
+                        onClick={() => setPage(1)}
                     >
                         {'1'}
                     </PaginationLink>
@@ -50,9 +41,7 @@ const Pagination = ({ movieOpen, setPage, totalPages, page, navOpen }) => {
                 <PaginationLink
                     key={startPage}
                     className={page === startPage ? 'active' : ''}
-                    onClick={() => {
-                        setPage(currentPage);
-                    }}
+                    onClick={() => setPage(currentPage)}
                 >
                     {startPage}
                 </PaginationLink>
@@ -60,9 +49,7 @@ const Pagination = ({ movieOpen, setPage, totalPages, page, navOpen }) => {
         }
 
         let paginateLastDots = page + 6 > pagesTotal ? true : false;
-        if (page !== 0 && page === pagesTotal) {
-            paginateLastDots = true;
-        }
+        if (page !== 0 && page === pagesTotal) paginateLastDots = true;
 
         paginationLinks.push(
             <React.Fragment key='pagination'>
@@ -72,20 +59,12 @@ const Pagination = ({ movieOpen, setPage, totalPages, page, navOpen }) => {
 
                 <PaginationLink
                     className={page === totalPages ? 'active' : ''}
-                    onClick={() => {
-                        setPage(totalPages);
-                    }}
+                    onClick={() => setPage(totalPages)}
                 >
                     {totalPages}
                 </PaginationLink>
                 {page !== pagesTotal && pagesTotal !== 0 ? (
-                    <PaginationLink
-                        onClick={() => {
-                            console.log(`Pagination Page: ${page + 1}`);
-
-                            setPage(page + 1);
-                        }}
-                    >
+                    <PaginationLink onClick={() => setPage(page + 1)}>
                         {' >'}
                     </PaginationLink>
                 ) : null}
@@ -118,11 +97,14 @@ const PaginationLinks = styled.div`
     left: 0;
     right: 0;
     margin-bottom: 0 !important;
-    background: rgba(0, 0, 0, 0.9);
+    /* background: rgba(0, 0, 0, 0.9); */
+    background: #111;
+
     transition: 0.3s;
 
     &:hover {
-        background: rgba(0, 0, 0, 0.95) !important;
+        /* background: rgba(0, 0, 0, 0.95) !important; */
+        /* background: linear-gradient(245deg, #06060c, #0f0e1b); */
     }
 
     &.hide {

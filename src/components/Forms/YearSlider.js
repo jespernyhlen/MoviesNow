@@ -41,7 +41,7 @@ class YearSlider extends Component {
                     <LabelContainer>
                         <label>Year</label>
                     </LabelContainer>
-                    <FormLabel className='form-label'>
+                    <FormLabel>
                         <p>Min: {this.state.values[0]}</p>
                         <p>Max: {this.state.values[1]}</p>
                     </FormLabel>
@@ -136,7 +136,7 @@ const FormLabel = styled.div`
     display: flex;
     justify-content: space-around;
     color: #ccc;
-    font-size: 1.2em;
+    font-size: 1.3em;
     height: 1.8em;
 `;
 

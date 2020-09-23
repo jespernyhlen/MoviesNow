@@ -16,6 +16,14 @@ import {
 import PlaceHolderImage from '../Images/placeholder-movieposter.png';
 import Involved from './Involved';
 
+let convertRuntime = (num) => {
+    let hours = num / 60;
+    let rhours = Math.floor(hours);
+    let minutes = (hours - rhours) * 60;
+    let rminutes = Math.round(minutes);
+    return rhours + 'h ' + rminutes + 'm';
+};
+
 const Details = ({ movie, movieOpen }) => {
     const [image1Loaded, setImage1Loaded] = useState(false);
     let history = useHistory();
@@ -26,20 +34,11 @@ const Details = ({ movie, movieOpen }) => {
         return () => {
             movieOpen(false);
         };
-    }, [movieOpen]);
+    }, []);
 
     let genresArray = movie ? movie.genres.map((item) => item.name) : null;
-    const convertRuntime = (num) => {
-        let hours = num / 60;
-        let rhours = Math.floor(hours);
-        let minutes = (hours - rhours) * 60;
-        let rminutes = Math.round(minutes);
-        return rhours + 'h ' + rminutes + 'm';
-    };
-
-    const convertedRuntime = movie ? convertRuntime(movie.runtime) : null;
-
-    const convertedReleaseDate = movie
+    let convertedRuntime = movie ? convertRuntime(movie.runtime) : null;
+    let convertedReleaseDate = movie
         ? moment(movie.release_date, 'YYYY-MM-DD')
         : null;
 
@@ -183,7 +182,7 @@ const MovieContainer = styled.div`
     box-shadow: rgba(27, 6, 65, 0.1) 0px 1px 20px;
     width: 100%;
     background: #0000002e;
-    border-radius: 5px;
+    border-radius: 15px;
     border-width: 2px;
     border-style: solid;
     border-color: rgba(81, 81, 81, 0.11);
@@ -206,7 +205,9 @@ const MovieContainer = styled.div`
 
 const MovieImage = styled.div`
     margin: 1rem 2rem 1rem 1rem;
-
+    img {
+        border-radius: 15px;
+    }
     @media only screen and (max-width: 1440px) {
         img {
             width: 30vw;

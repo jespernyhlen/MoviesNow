@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setNavOpen, setPage, setFilters, setFilterOpen } from '../../actions';
@@ -10,14 +10,32 @@ import Searchbar from './Searchbar';
 import Filter from '../Forms/Filter';
 import Logo from '../Images/logo.png';
 
-const Navbar = ({
-    setPage,
-    movieOpen,
-    setNavOpen,
-    navOpen,
-    filterOpen,
-    setFilterOpen,
-}) => {
+const Navbar = (props) => {
+    const {
+        setPage,
+        movieOpen,
+        setNavOpen,
+        navOpen,
+        filterOpen,
+        setFilterOpen,
+    } = props;
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        document.addEventListener('scroll', (e) => {
+            var scrolled = document.scrollingElement.scrollTop;
+            if (scrolled >= 50) {
+                if (isScrolled !== true) {
+                    setIsScrolled(true);
+                }
+            } else {
+                if (isScrolled !== false) {
+                    setIsScrolled(false);
+                }
+            }
+        });
+    }, [isScrolled]);
+
     let handleClick = (e) => {
         setNavOpen(!navOpen);
         let rootElement = document.querySelectorAll('#root')[0];
@@ -33,7 +51,10 @@ const Navbar = ({
     };
     return (
         <>
-            <StyledNavbar className={movieOpen ? 'hide-bar' : ''}>
+            <StyledNavbar
+                isScrolled={isScrolled}
+                className={movieOpen ? 'hide-bar' : ''}
+            >
                 <LeftContainer>
                     <NavLogoContainer>
                         <NavLink
@@ -49,14 +70,28 @@ const Navbar = ({
                         to='/trending'
                         onClick={() => resetPagination()}
                     >
-                        Trending Movies
+                        Trending
+                    </StyledLink>
+                    <StyledLink
+                        className='desktop'
+                        to='/toprated'
+                        onClick={() => resetPagination()}
+                    >
+                        Top Rated
+                    </StyledLink>
+                    <StyledLink
+                        className='desktop'
+                        to='/intheatres'
+                        onClick={() => resetPagination()}
+                    >
+                        In Theatres
                     </StyledLink>
                     <StyledLink
                         className='desktop'
                         to='/upcoming'
                         onClick={() => resetPagination()}
                     >
-                        Upcoming Movies
+                        Upcoming
                     </StyledLink>
                 </LeftContainer>
                 <RightContainer className={navOpen ? 'hide' : ''}>
@@ -88,13 +123,39 @@ const Navbar = ({
                     <StyledLinkMobile
                         exact
                         to='/trending'
-                        onClick={(e) => handleClick(e)}
+                        onClick={(e) => {
+                            resetPagination();
+                            handleClick(e);
+                        }}
                     >
                         Trending Movies
                     </StyledLinkMobile>
                     <StyledLinkMobile
+                        exact
+                        to='/toprated'
+                        onClick={(e) => {
+                            resetPagination();
+                            handleClick(e);
+                        }}
+                    >
+                        Top Rated Movies
+                    </StyledLinkMobile>
+                    <StyledLinkMobile
+                        exact
+                        to='/intheatres'
+                        onClick={(e) => {
+                            resetPagination();
+                            handleClick(e);
+                        }}
+                    >
+                        In Theatres Movies
+                    </StyledLinkMobile>
+                    <StyledLinkMobile
                         to='/upcoming'
-                        onClick={(e) => handleClick(e)}
+                        onClick={(e) => {
+                            resetPagination();
+                            handleClick(e);
+                        }}
                     >
                         Upcoming Movies
                     </StyledLinkMobile>
@@ -121,7 +182,7 @@ const FilterButton = styled.div`
     font-size: 1.05em;
     font-weight: 400;
     padding: 0 0.5em 0.1em;
-    margin: auto 1em;
+    margin: auto 0.75em;
     opacity: 75%;
     cursor: pointer;
     transition: 0.2s all;
@@ -147,7 +208,7 @@ const StyledLink = styled(NavLink)`
     color: #ccc;
     border: none;
     background: none;
-    margin: auto 1em;
+    margin: auto 0.75em;
     padding: 0 0.5em 0.1em;
     outline: none;
     text-decoration: none;
@@ -195,7 +256,7 @@ const RightContainer = styled.div`
         top: 4.2rem;
         width: 100%;
         left: 0;
-        background: #0e0e0e;
+        background: #111;
     }
 `;
 
@@ -206,10 +267,13 @@ const StyledNavbar = styled.nav`
     z-index: 999;
     width: 100%;
     justify-content: space-between;
-    background: rgba(0, 0, 0, 0.9);
+    /* background: rgba(0, 0, 0, 0.9); */
+    /* background: #111; */
     opacity: 1;
     padding: 0.5rem 1.5rem;
-    transition: 0.5s transform, 0.5s opacity;
+    background-color: ${(props) =>
+        props.isScrolled === true ? 'black' : 'transparent'};
+    transition: background-color 0.2s, transform 0.5s, opacity 0.5s;
 
     &.hide-bar {
         transform: translateY(-50vh) !important;
@@ -220,7 +284,8 @@ const StyledNavbar = styled.nav`
             display: none;
         }
         padding: 0.5rem 0.5rem;
-        background: #0e0e0e;
+        /* background: #0e0e0e; */
+        background: #111;
     }
 
     /* @media only screen and (max-width: 667px) {

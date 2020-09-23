@@ -18,9 +18,6 @@ const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const CallMovieAPI = require('axios').create({
     baseURL: 'https://api.themoviedb.org/3',
-    params: {
-        api_key: `${TMDB_API_KEY}`,
-    },
 });
 
 export const setFilterOpen = (open) => (dispatch) => {
@@ -44,43 +41,30 @@ export const resetFilters = (reset) => (dispatch) => {
     });
 };
 
-export const fetchMoviesFilter = (page = 1, filters, type) => async (
-    dispatch
-) => {
-    let pageNumber = page || 1;
-    let yearFilterString =
-        filters.yearFilter[0] & filters.yearFilter[1]
-            ? `&primary_release_date.gte=${filters.yearFilter[0]}-01-01&primary_release_date.lte=${filters.yearFilter[1]}-01-01`
-            : '';
-    let voteFilterString =
-        filters.voteFilter[0] & filters.voteFilter[1]
-            ? `&vote_average.gte=${filters.voteFilter[0]}&vote_average.lte=${filters.voteFilter[1]}`
-            : '';
-    let genreFilterString = filters.genreFilter.type
-        ? `&with_genres=${filters.genreFilter.type}`
-        : '';
-    let url = `discover/movie?api_key=${TMDB_API_KEY}${genreFilterString}${yearFilterString}${voteFilterString}&page=${pageNumber}&include_adult=false`;
+export const fetchMoviesFilter = (page = 1, filters) => async (dispatch) => {
+    let yearFilterString = '';
+    let voteFilterString = '';
+    let genreFilterString = '';
+
+    if (filters.yearFilter[0] && filters.yearFilter[1]) {
+        yearFilterString = `&primary_release_date.gte=${filters.yearFilter[0]}-01-01&primary_release_date.lte=${filters.yearFilter[1]}-01-01`;
+    }
+
+    if (filters.voteFilter[0] && filters.voteFilter[1]) {
+        voteFilterString = `&vote_average.gte=${filters.voteFilter[0]}&vote_average.lte=${filters.voteFilter[1]}`;
+    }
+
+    if (filters.genreFilter.type) {
+        genreFilterString = `&with_genres=${filters.genreFilter.type}`;
+    }
+
+    let URL = `discover/movie?api_key=${TMDB_API_KEY}${genreFilterString}${yearFilterString}${voteFilterString}&page=${page}&include_adult=false`;
 
     dispatch({ type: MOVIES_FETCH_STARTED });
 
     try {
-        const response = await CallMovieAPI.get(url);
-
-        await Promise.all(
-            response.data.results.map(async (movie) => {
-                try {
-                    const responseDetails = await CallMovieAPI.get(
-                        `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_API_KEY}&&language=en-US`
-                    );
-                    movie.details = responseDetails.data;
-                } catch (error) {
-                    dispatch({ type: MOVIES_FETCH_FAILED });
-                    console.error('Fetch Error: ' + error);
-                }
-            })
-        );
-
-        response.data['type'] = type;
+        const response = await CallMovieAPI.get(URL);
+        response.data['type'] = 'filter';
 
         dispatch({
             type: MOVIES_FETCH_FINISHED,
@@ -98,7 +82,6 @@ export const fetchMovie = (id) => async (dispatch) => {
 
     try {
         const response = await CallMovieAPI.get(url);
-
         dispatch({ type: MOVIE_FETCH_FINISHED, payload: response.data });
     } catch (error) {
         dispatch({ type: MOVIE_FETCH_FAILED });
@@ -106,40 +89,93 @@ export const fetchMovie = (id) => async (dispatch) => {
     }
 };
 
-export const fetchMovies = (url, query = '', type) => async (dispatch) => {
-    let URLs = {
-        trending: `/trending/movie/week?api_key=${TMDB_API_KEY}`,
-        upcoming: `/discover/movie?api_key=${TMDB_API_KEY}`,
-        search: `/search/movie?api_key=${TMDB_API_KEY}`,
-    };
-
-    if (type === 'search') {
-        if (!query) {
-            return;
-        }
-        dispatch({ type: SEARCH_QUERY, payload: query });
+export const fetchSearchMovies = (page = 1, query) => async (dispatch) => {
+    if (!query) {
+        return;
     }
+    dispatch({ type: SEARCH_QUERY, payload: query });
+    dispatch({ type: MOVIES_FETCH_STARTED });
 
+    let URL = `/search/movie?api_key=${TMDB_API_KEY}&language=en-US&query=${query}&page=${page}&include_adult=false&840`;
+
+    try {
+        const response = await CallMovieAPI.get(URL);
+        response.data['type'] = 'search';
+
+        dispatch({
+            type: MOVIES_FETCH_FINISHED,
+            payload: response.data,
+        });
+    } catch (error) {
+        dispatch({ type: MOVIES_FETCH_FAILED });
+        console.error('Fetch Error: ' + error);
+    }
+};
+
+export const fetchInTheatresMovies = (page = 1) => async (dispatch) => {
+    dispatch({ type: MOVIES_FETCH_STARTED });
+    let URL = `/movie/now_playing?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}`;
+
+    try {
+        const response = await CallMovieAPI.get(URL);
+        response.data['type'] = 'intheatres';
+
+        dispatch({
+            type: MOVIES_FETCH_FINISHED,
+            payload: response.data,
+        });
+    } catch (error) {
+        dispatch({ type: MOVIES_FETCH_FAILED });
+        console.error('Fetch Error: ' + error);
+    }
+};
+
+export const fetchUpcomingMovies = (page = 1, fromDate, endDate) => async (
+    dispatch
+) => {
+    dispatch({ type: MOVIES_FETCH_STARTED });
+    let URL = `/discover/movie?api_key=${TMDB_API_KEY}&language=en-US&region=US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&release_date.gte=${fromDate}&release_date.lte=${endDate}&with_release_type=3%7C2`;
+
+    try {
+        const response = await CallMovieAPI.get(URL);
+        response.data['type'] = 'upcoming';
+
+        dispatch({
+            type: MOVIES_FETCH_FINISHED,
+            payload: response.data,
+        });
+    } catch (error) {
+        dispatch({ type: MOVIES_FETCH_FAILED });
+        console.error('Fetch Error: ' + error);
+    }
+};
+
+export const fetchTopratedMovies = (page = 1) => async (dispatch) => {
+    dispatch({ type: MOVIES_FETCH_STARTED });
+    let URL = `/movie/top_rated?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}`;
+
+    try {
+        const response = await CallMovieAPI.get(URL);
+        response.data['type'] = 'toprated';
+
+        dispatch({
+            type: MOVIES_FETCH_FINISHED,
+            payload: response.data,
+        });
+    } catch (error) {
+        dispatch({ type: MOVIES_FETCH_FAILED });
+        console.error('Fetch Error: ' + error);
+    }
+};
+
+export const fetchTrendingMovies = (page = 1) => async (dispatch) => {
     dispatch({ type: MOVIES_FETCH_STARTED });
 
     try {
-        const response = await CallMovieAPI.get(URLs[type] + url);
-
-        await Promise.all(
-            response.data.results.map(async (movie) => {
-                try {
-                    const responseDetails = await CallMovieAPI.get(
-                        `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_API_KEY}&&language=en-US`
-                    );
-                    movie.details = responseDetails.data;
-                } catch (error) {
-                    dispatch({ type: MOVIES_FETCH_FAILED });
-                    console.error('Fetch Error: ' + error);
-                }
-            })
+        const response = await CallMovieAPI.get(
+            `/trending/movie/week?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}`
         );
-
-        response.data['type'] = type;
+        response.data['type'] = 'trending';
 
         dispatch({
             type: MOVIES_FETCH_FINISHED,

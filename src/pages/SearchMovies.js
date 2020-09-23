@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import Loader from '../components/Extra/Loader';
 import MoviesContainer from '../components/Movies/MoviesContainer';
 
-const SearchMovies = ({ searchQuery, fetchError, isLoading }) => {
+const SearchMovies = (props) => {
+    const { searchQuery, fetchError, isLoading } = props;
+
     return (
         <>
             <Wrapper>

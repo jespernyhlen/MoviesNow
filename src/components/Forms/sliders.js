@@ -200,7 +200,7 @@ export function Tick({ tick, count, format }) {
                 style={{
                     position: 'absolute',
                     marginTop: 22,
-                    fontSize: 14,
+                    fontSize: 11,
                     color: '#aaa',
                     textAlign: 'center',
                     marginLeft: `${-(100 / count) / 2}%`,

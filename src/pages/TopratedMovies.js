@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchTrendingMovies } from '../actions';
+import { fetchTopratedMovies } from '../actions';
 import styled from 'styled-components';
 
 import Loader from '../components/Extra/Loader';
 import MoviesContainer from '../components/Movies/MoviesContainer';
 
-const TrendingMovies = (props) => {
-    const { page, fetchError, isLoading, fetchTrendingMovies } = props;
+const TopratedMovies = (props) => {
+    const { page, fetchTopratedMovies, fetchError, isLoading } = props;
 
     useEffect(() => {
-        fetchTrendingMovies(page);
-    }, [fetchTrendingMovies, page]);
+        fetchTopratedMovies(page);
+    }, [fetchTopratedMovies, page]);
 
     return (
         <Wrapper>
-            <HeaderText>Trending movies right now</HeaderText>
+            <HeaderText>Top rated movies right now</HeaderText>
             {fetchError && (
                 <ErrorText>An error occured, please try again.</ErrorText>
             )}
@@ -32,8 +32,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchTrendingMovies })(
-    TrendingMovies
+export default connect(mapStateToProps, { fetchTopratedMovies })(
+    TopratedMovies
 );
 
 const Wrapper = styled.div`

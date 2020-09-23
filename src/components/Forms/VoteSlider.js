@@ -132,7 +132,7 @@ const FormLabel = styled.div`
     display: flex;
     justify-content: space-around;
     color: #ccc;
-    font-size: 1.2em;
+    font-size: 1.3em;
     height: 1.8em;
 `;
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchMovies } from '../../actions';
+import { fetchSearchMovies } from '../../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
-const Searchbar = ({ type, page, fetchMovies, searchQuery }) => {
+const Searchbar = ({ type, page, fetchSearchMovies, searchQuery }) => {
     const [query, setQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(
         type === 'search' ? page : 1
@@ -14,17 +14,15 @@ const Searchbar = ({ type, page, fetchMovies, searchQuery }) => {
     const location = useLocation();
     const history = useHistory();
 
-    let url = `&language=en-US&query=${query}&page=${currentPage}&include_adult=false&840`;
-
     let currentPath = location.pathname;
 
-    const handleSearchSubmit = (event, url, query) => {
+    const handleSearchSubmit = (event, query) => {
         event.preventDefault();
 
         if (currentPath === '/search') {
-            return fetchMovies(url, query, 'search');
+            return fetchSearchMovies(currentPage, query);
         } else {
-            fetchMovies(url, query, 'search');
+            fetchSearchMovies(currentPage, query);
             return history.push('/search');
         }
     };
@@ -38,19 +36,13 @@ const Searchbar = ({ type, page, fetchMovies, searchQuery }) => {
         return () => {
             setPage(1);
         };
-    }, [searchQuery, fetchMovies, query]);
+    }, [searchQuery, query]);
 
     useEffect(() => {
         if (searchQuery && currentPath === '/search') {
-            fetchMovies(url, query, 'search');
+            fetchSearchMovies(currentPage, query);
         }
-    }, [currentPage, fetchMovies, searchQuery, currentPath, query, url]);
-
-    useEffect(() => {
-        if (searchQuery && currentPath === '/search') {
-            setQuery(searchQuery);
-        }
-    }, [searchQuery, currentPage]);
+    }, [currentPage, fetchSearchMovies, searchQuery, currentPath, query]);
 
     let setPage = (newPage) => {
         setCurrentPage(newPage);
@@ -58,7 +50,7 @@ const Searchbar = ({ type, page, fetchMovies, searchQuery }) => {
 
     return (
         <>
-            <Form onSubmit={(e) => handleSearchSubmit(e, url, query)}>
+            <Form onSubmit={(e) => handleSearchSubmit(e, query)}>
                 <StyledInput
                     type='text'
                     placeholder='Search movie..'
@@ -83,7 +75,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchMovies })(Searchbar);
+export default connect(mapStateToProps, { fetchSearchMovies })(Searchbar);
 
 const Form = styled.form`
     @media only screen and (max-width: 667px) {
@@ -124,15 +116,15 @@ const StyledInput = styled.input`
 
 const StyledButton = styled.button`
     width: 2.75rem;
-    height: 2rem;
     border-radius: 0.125em;
-    border: 1px solid black;
+    border: 0;
     margin: 0 1em 0 0em;
     background: #b55500;
     outline: none;
     transition: all 300ms ease-in-out;
     color: white;
     height: 3rem;
+    transform: scale(1.06) translateY(0.5px) translateX(-1px);
 
     :hover {
         cursor: pointer;

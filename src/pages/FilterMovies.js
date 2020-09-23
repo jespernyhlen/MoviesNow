@@ -7,15 +7,11 @@ import MoviesContainer from '../components/Movies/MoviesContainer';
 import Pagination from '../components/Layout/Pagination';
 import Loader from '../components/Extra/Loader';
 
-function FilterMovies({
-    page,
-    fetchError,
-    filters,
-    isLoading,
-    fetchMoviesFilter,
-}) {
+const FilterMovies = (props) => {
+    const { page, fetchError, filters, isLoading, fetchMoviesFilter } = props;
+
     useEffect(() => {
-        fetchMoviesFilter(page, filters, 'filter');
+        fetchMoviesFilter(page, filters);
     }, [fetchMoviesFilter, page, filters]);
 
     return (
@@ -34,7 +30,7 @@ function FilterMovies({
             <Pagination />
         </Wrapper>
     );
-}
+};
 
 const mapStateToProps = (state) => ({
     page: state.movies.page,

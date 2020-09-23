@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchTrendingMovies } from '../actions';
+import { fetchInTheatresMovies } from '../actions';
 import styled from 'styled-components';
 
 import Loader from '../components/Extra/Loader';
 import MoviesContainer from '../components/Movies/MoviesContainer';
 
-const TrendingMovies = (props) => {
-    const { page, fetchError, isLoading, fetchTrendingMovies } = props;
+const Intheatres = (props) => {
+    const { page, fetchInTheatresMovies, fetchError, isLoading } = props;
 
     useEffect(() => {
-        fetchTrendingMovies(page);
-    }, [fetchTrendingMovies, page]);
+        fetchInTheatresMovies(page);
+    }, [fetchInTheatresMovies, page]);
 
     return (
         <Wrapper>
-            <HeaderText>Trending movies right now</HeaderText>
+            <HeaderText>In Theatres movies right now</HeaderText>
             {fetchError && (
                 <ErrorText>An error occured, please try again.</ErrorText>
             )}
@@ -32,9 +32,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchTrendingMovies })(
-    TrendingMovies
-);
+export default connect(mapStateToProps, { fetchInTheatresMovies })(Intheatres);
 
 const Wrapper = styled.div`
     margin: 8em 0 6rem;

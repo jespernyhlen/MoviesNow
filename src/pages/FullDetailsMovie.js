@@ -8,6 +8,7 @@ import Loader from '../components/Extra/Loader';
 
 const FullMovieDetails = (props) => {
     const { movie, fetchMovie, fetchError, isLoading } = props;
+
     let movieID = props.match.params.id;
 
     useEffect(() => {
